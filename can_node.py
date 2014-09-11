@@ -65,12 +65,18 @@ class CAN_Node(object):
 
         return new_node
 
-
     def view(self):
         pass
 
-    def leave(self):
+    def _merge(self):
         pass
+
+    def leave(self):
+        #Thing is i got to hold a list of node somewhere, ya or else how would even know what is the xy
+        mergeing_node = min(self.neighbours, key = self.neighbours.zone.area)
+        mergeing_node.zone = self.zone.merge(mergeing_node.zone)
+        mergeing_node.neighbours = self.neighbours + (mergeing_node.neighbours - self.neighbours)
+        return mergeing_node
 
     def insert_file(self):
         pass

@@ -8,6 +8,9 @@ class Point(object):
         self.x = xy[0]
         self.y = xy[1]
 
+    # def __lt__(self, other):
+    #     return bool(self.x < other.x and )
+
     def __repr__(self):
         return '(%s, %s)' % (self.x, self.x)
 
@@ -84,5 +87,10 @@ class CAN_Zone(object):
         else:
             return self._hsplit()
 
-    def merge(self):
-        pass #This will be called by CAN_Node object
+    def merge(self,zone):
+        x_min = min(self.x,zone.x)
+        y_min = min(self.y,self.y)
+
+        x_max = max(self.x,zone.x)
+        y_max = max(self.y,zone.y)
+        return CAN_Zone((x_min,y_min),(x_max,y_max))

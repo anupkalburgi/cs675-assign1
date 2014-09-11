@@ -15,15 +15,16 @@ class TestCanNode(unittest.TestCase):
         node1 = CAN_Node(1, zone)
         node2 = node1.join(2)
         node3 = node2.join(3)
-        #node4 = node3.join(4)
+        node4 = node3.join(4)
         print "#########"
         print node1
         print node2
         print node3
+        print node4
         print "-----------"
-        print node1.neighbours
-        print node2.neighbours
-        print node3.neighbours
+        print len(node1.neighbours)
+        print len(node2.neighbours)
+        print len(node3.neighbours)
 
         # print(node1)
         # print(node)
