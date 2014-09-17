@@ -2,7 +2,13 @@ from can_zone import CAN_Zone
 import random
 from can_zone import Point
 from itertools import ifilterfalse
+import socket
+import Pyro4
+PORT = 5150
 
+
+def get_host():
+    return socket.gethostbyname(socket.gethostname())
 
 class CAN_Node(object):
 
@@ -11,6 +17,13 @@ class CAN_Node(object):
         self.zone = zone
         self.hash_table = {}
         self.neighbours = []
+        self.url = self.get_object_url()
+
+    def get_object_url(self):
+        #URL Format: PYRO:example.warehouse@129.174.126.30:5150
+        url = "PYRO:" + "can_node."+ str(self.id) + "@" + str(get_host()) + ':' + str(PORT)
+        return url
+
 
     @staticmethod
     def can_node_point():
@@ -73,6 +86,7 @@ class CAN_Node(object):
 
     def leave(self):
         #Thing is i got to hold a list of node somewhere, ya or else how would even know what is the xy
+        # For a node merge to be proper either it's width or height must be the same or both have to be same
         mergeing_node = min(self.neighbours, key = self.neighbours.zone.area)
         mergeing_node.zone = self.zone.merge(mergeing_node.zone)
         mergeing_node.neighbours = self.neighbours + (mergeing_node.neighbours - self.neighbours)
@@ -83,3 +97,17 @@ class CAN_Node(object):
 
     def search(self):
         pass
+
+
+def main():
+    node = CAN_Node(1)
+    daemon = Pyro4.Daemon(host=get_host(), port=5150);
+    Pyro4.Daemon.serveSimple(
+            {
+                node: "can_node."+str(node.id)
+            },
+            daemon= daemon,
+            ns = False )
+
+if __name__=="__main__":
+    main()
