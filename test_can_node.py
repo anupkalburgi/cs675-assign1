@@ -20,7 +20,7 @@ class TestCanNode(unittest.TestCase):
         print node1
         print node2
         print node3
-        print node4
+        print node4,node4.url
         print "-----------"
         print len(node1.neighbours)
         print len(node2.neighbours)
