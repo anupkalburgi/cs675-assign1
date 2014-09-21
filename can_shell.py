@@ -23,7 +23,7 @@ class CANSHELL(cmd.Cmd):
 
     def join(self):
         pass
-    
+
     def do_EOF(self, line):
         return True
 

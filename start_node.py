@@ -2,6 +2,9 @@ import Pyro4
 import socket
 from can_node import CAN_Node
 
+Pyro4.config.SERIALIZER = 'pickle'
+Pyro4.config.SERIALIZERS_ACCEPTED.add('pickle')
+
 
 '''
 Config:
@@ -25,7 +28,7 @@ def main():
     node_uri = daemon.register(node)
     ns = Pyro4.locateNS(host='medusa-node1.vsnet.gmu.edu', port=9090)
     ns.register("node."+str(id), node_uri)
-    print "node."+ str(id)
+    print "node."+ id
     print("Can Node running.")
     daemon.requestLoop()
 

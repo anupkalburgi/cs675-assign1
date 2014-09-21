@@ -33,7 +33,7 @@ def bootstrap_deploy():
     #run('python %s/dameon_start.py'%code_dir)
     #TODO--Before starting of with command check if the directoy exists
     with settings(warn_only=True):
-        run("pyro4-ns --host=%s >& /dev/null < /dev/null &" %env.hosts[0] )
+        run("pyro4-ns --host=%s >& /dev/null < /dev/null &;sleep 2" %env.hosts[0] )
         run('nohup python %s/bootstrap_node.py >& /dev/null < /dev/null &' %code_dir)
 
 def node_deploy():
