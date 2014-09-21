@@ -2,7 +2,8 @@ import cmd
 import Pyro4
 
 class CANSHELL(cmd.Cmd):
-    """Simple command processor example."""
+    def __init__(self):
+        self.nameserver = None
 
     prompt = 'canshell>: '
     intro = "Welcome! You can interact witht he CAN network using this shell."
@@ -15,12 +16,12 @@ class CANSHELL(cmd.Cmd):
 
     def preloop(self):
         #Locate NameServer and register your self
-        ns = Pyro4.locateNS(host='medusa-node1.vsnet.gmu.edu')
-        print "Your are now connected to {0}".format(ns._pyroUri.location)
-        print "I will have to connect to boot strap server here"
+        self.nameserver = Pyro4.locateNS(host='medusa-node1.vsnet.gmu.edu')
+        print "Name Lookup services connected at {0}".format(self.nameserver._pyroUri.location)
 
     def do_prompt(self, line):
         "Change the interactive prompt"
+        print self.nameserver
         self.prompt = line + ': '
 
     def do_EOF(self, line):
