@@ -7,15 +7,15 @@ env.always_use_pty = False
 code_dir = '/home/akalburg/github'
 
 def nodes():
-    env.hosts = ['129.174.94.98',\
-                 '129.174.94.97',\
-                 '129.174.94.96',\
-                 '129.174.94.95']
+    env.hosts = ['medusa-node2.vsnet.gmu.edu',\
+                 'medusa-node3.vsnet.gmu.edu',\
+                 'medusa-node4.vsnet.gmu.edu',\
+                 'medusa-node5.vsnet.gmu.edu']
 
 
 
 def bootstrap():
-    env.hosts = ['129.174.94.99']
+    env.hosts = ['medusa-node1.vsnet.gmu.edu']
 
 
 def get_code():
@@ -31,8 +31,9 @@ def refresh_code():
 
 def bootstrap_deploy():
     #run('python %s/dameon_start.py'%code_dir)
-    run("pyro4-ns --host=%s >& /dev/null < /dev/null &" %env.hosts[0] )
-    run('nohup python %s/bootstrap_node.py >& /dev/null < /dev/null &' %code_dir)
+    with settings(warn_only=True):
+        run("pyro4-ns --host=%s >& /dev/null < /dev/null &" %env.hosts[0] )
+        run('nohup python %s/bootstrap_node.py >& /dev/null < /dev/null &' %code_dir)
 
 def node_deploy():
     run('nohup python %s/start_node.py >& /dev/null < /dev/null &' %code_dir)
