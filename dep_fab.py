@@ -15,7 +15,8 @@ def nodes():
 
 
 def bootstrap():
-    env.hosts = ['medusa-node1.vsnet.gmu.edu']
+    env.hosts = ['129.174.94.99']
+
 
 def get_code():
     with settings(warn_only=True):
@@ -30,7 +31,7 @@ def refresh_code():
 
 def bootstrap_deploy():
     #run('python %s/dameon_start.py'%code_dir)
-    run('nohup pyro4-ns --host=%s >& /dev/null < /dev/null & ' %env.hosts )
+    run("pyro4-ns --host=%s >& /dev/null < /dev/null &" %env.hosts[0] )
     run('nohup python %s/bootstrap_node.py >& /dev/null < /dev/null &' %code_dir)
 
 def node_deploy():
