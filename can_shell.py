@@ -2,10 +2,7 @@ import cmd
 import Pyro4
 
 class CANSHELL(cmd.Cmd):
-    def __init__(self):
-        self.nameserver = None
-
-    prompt = 'canshell>: '
+    prompt = 'canshell:-> '
     intro = "Welcome! You can interact witht he CAN network using this shell."
 
     doc_header = 'doc_header'
@@ -24,6 +21,9 @@ class CANSHELL(cmd.Cmd):
         print self.nameserver
         self.prompt = line + ': '
 
+    def join(self):
+        pass
+    
     def do_EOF(self, line):
         return True
 
