@@ -33,7 +33,8 @@ def bootstrap_deploy():
     #run('python %s/dameon_start.py'%code_dir)
     #TODO--Before starting of with command check if the directoy exists
     with settings(warn_only=True):
-        run('export PYRO_SERIALIZERS_ACCEPTED=serpent,json,marshal,pickle')
+        #run('export PYRO_SERIALIZERS_ACCEPTED=serpent,json,marshal,pickle')
+        # Right way of doing it is http://stackoverflow.com/questions/8313238/best-way-to-add-an-environment-variable-in-fabric
         run("pyro4-ns --host=%s >& /dev/null < /dev/null &" %env.hosts[0] )
         run('nohup python %s/bootstrap_node.py >& /dev/null < /dev/null &' %code_dir)
 
