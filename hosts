@@ -12,3 +12,10 @@
 129.174.94.88 - medusa-node12.vsnet.gmu.edu
 129.174.94.87 - medusa-node13.vsnet.gmu.edu
 129.174.94.86 - medusa-node14.vsnet.gmu.edu
+
+
+import Pyro4
+Pyro4.config.SERIALIZER = 'pickle'
+Pyro4.config.SERIALIZERS_ACCEPTED.add('pickle')
+obj = Pyro4.Proxy('PYRONAME:bootstrap.node')
+obj.join(3)
