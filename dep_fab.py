@@ -36,13 +36,16 @@ def bootstrap_deploy():
         #run('export PYRO_SERIALIZERS_ACCEPTED=serpent,json,marshal,pickle')
         # Right way of doing it is http://stackoverflow.com/questions/8313238/best-way-to-add-an-environment-variable-in-fabric
         run("pyro4-ns --host=%s >& /dev/null < /dev/null &" %env.hosts[0] )
-        run('nohup python %s/bootstrap_node.py >& /dev/null < /dev/null &' %code_dir)
+        run('nohup python %s/bootstrap_node.py  >& /dev/null < /dev/null &' %code_dir)
 
 def node_deploy():
     run('nohup python %s/start_node.py >& /dev/null < /dev/null &' %code_dir)
 
 def kill():
     run("fuser -k 5150/tcp;sleep 1")
+
+def stop():
+    run("fuser -k 9090/tcp;sleep 1")
 
 
 

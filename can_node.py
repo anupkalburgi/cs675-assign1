@@ -63,6 +63,7 @@ class CAN_Node(object):
         else:
             print point, "Not Found in Zone", self.zone
             next_node = self._next_best_node(point)
+            next_node = Pyro4.Proxy('PYRONAME:node.%s'%next_node.id)
             new_node = next_node.join(id, point)
 
         return new_node
@@ -87,17 +88,3 @@ class CAN_Node(object):
     def search(self):
         pass
 
-'''
-def main():
-    node = CAN_Node(1)
-    daemon = Pyro4.Daemon(host=get_host(), port=5150);
-    Pyro4.Daemon.serveSimple(
-            {
-                node: "can_node."+str(node.id)
-            },
-            daemon= daemon,
-            ns = False )
-
-if __name__=="__main__":
-    main()
-'''
