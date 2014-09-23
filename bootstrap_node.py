@@ -9,9 +9,10 @@ Config:
 BOOTSTRAP_SERVER = "medusa-node1.vsnet.gmu.edu"
 '''
 
+#PYRO_LOGFILE = '/home/akalburg/github/logs/errors.log' #TODO: Goto make sure tp move it to FAB
+
 Pyro4.config.SERIALIZER = 'pickle'
 Pyro4.config.SERIALIZERS_ACCEPTED.add('pickle')
-#Pyro4.config.PYRO_LOGFILE = '/home/akalburg/github/logs/errors.log' #TODO: Goto make sure tp move it to FAB
 Pyro4.config.DETAILED_TRACEBACK = True
 
 def get_host():

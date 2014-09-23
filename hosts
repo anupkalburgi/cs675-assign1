@@ -14,6 +14,10 @@
 129.174.94.86 - medusa-node14.vsnet.gmu.edu
 
 
+fab bootstrap stop  -f dep_fab.py
+fab bootstrap kill  -f dep_fab.py
+
+
 import Pyro4
 Pyro4.config.SERIALIZER = 'pickle'
 Pyro4.config.SERIALIZERS_ACCEPTED.add('pickle')
