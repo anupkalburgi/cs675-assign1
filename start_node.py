@@ -4,8 +4,7 @@ from can_node import CAN_Node
 
 Pyro4.config.SERIALIZER = 'pickle'
 Pyro4.config.SERIALIZERS_ACCEPTED.add('pickle')
-
-
+Pyro4.config.PYRO_LOGFILE = 'logs/errors.log'
 '''
 Config:
 BOOTSTRAP_SERVER = "medusa-node1.vsnet.gmu.edu"

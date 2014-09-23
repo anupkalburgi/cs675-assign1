@@ -22,6 +22,7 @@ def refresh_code():
         if not run("test -d %s" % code_dir).failed:
             run('rm -rf %s' % code_dir)
         run("git clone  https://github.com/anupkalburgi/cs675-assign1.git %s" % code_dir)
+        run("cd %s;mkdir -p logs;touch logs/errors.log" % code_dir)
 
 
 def bootstrap_deploy():
