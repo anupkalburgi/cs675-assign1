@@ -24,6 +24,15 @@ class CAN_Node(object):
         self.hash_table = {}
         self.neighbours = []
 
+    def pyro_node_constructor(self,id,zone,neighbours,hash_table=None):
+        if self.id == id:
+            self.zone = zone
+            self.neighbours = neighbours
+            self.hash_table = hash_table
+        # Else Will have to raise a exception, because the request was not right
+        # Nor raising a Exception can make debugging harder !!!! Ah ok
+
+
     @staticmethod
     def can_node_point():
         return Point((random.randint(0, 10), random.randint(0, 10)))
@@ -65,8 +74,9 @@ class CAN_Node(object):
         print "point:", point, "zone:", self.zone
         if point in self.zone:
             self.zone, new_zone = self.zone.split()
-            new_node = CAN_Node(id, new_zone)
-            new_node.neighbours = self.neighbours + [self]
+            pyro_node = Pyro4.Proxy('PYRONAME:node.%s'%id)
+            neighbours = self.neighbours + [self]
+            new_node = pyro_node.pyro_node_constructor(id, new_zone,neighbours)
             self.update_neighbours(new_node)
             self.neighbours.append(new_node)
             print "Finished Join"
