@@ -7,7 +7,7 @@ import Pyro4
 
 import logging
 logger = logging.getLogger('can_node')
-hdlr = logging.FileHandler('/home/akalburg/github/logs/node.log')
+hdlr = logging.FileHandler('can_node.log')
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 logger.addHandler(hdlr) 
