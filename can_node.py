@@ -5,6 +5,15 @@ from itertools import ifilterfalse
 import socket
 import Pyro4
 
+import logging
+logger = logging.getLogger('myapp')
+hdlr = logging.FileHandler('logs/node.log')
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+hdlr.setFormatter(formatter)
+logger.addHandler(hdlr) 
+logger.setLevel(logging.INFO)
+
+
 @Pyro4.expose
 class CAN_Node(object):
 
@@ -51,6 +60,7 @@ class CAN_Node(object):
         #Generate random x,y for the given node,Use self.zone to divide and assign it to the new node
         if not point:
             point = self.can_node_point()
+            logger.info("New Point Generated:{0}".format(point))
         print "point:", point, "zone:", self.zone
         if point in self.zone:
             self.zone, new_zone = self.zone.split()
@@ -61,10 +71,12 @@ class CAN_Node(object):
             print "Finished Join"
 
         else:
-            print point, "Not Found in Zone", self.zone
+            logger.info("Point {0} was not found in zone {1}".format(point, self.zone))
             next_node = self._next_best_node(point)
-            next_node = Pyro4.Proxy('PYRONAME:node.%s'%next_node.id)
-            new_node = next_node.join(id, point)
+            logger.info("Next Best point choosen was {0}".format(next_node.id))
+            pyro_node = Pyro4.Proxy('PYRONAME:node.%s'%next_node.id)
+            logger.info("PyroNode:{pyro_node} is being connected to".format(pyro_node))
+            new_node = pyro_node.join(id, point)
 
         return new_node
 

@@ -1,6 +1,13 @@
 from __future__ import print_function
 import Pyro4
-#import person
+import person
+
+
+
+Pyro4.config.SERIALIZER = 'pickle'
+Pyro4.config.SERIALIZERS_ACCEPTED.add('pickle')
+Pyro4.config.REQUIRE_EXPOSE = True
+Pyro4.config.DETAILED_TRACEBACK = True
 
 
 class Warehouse(object):
@@ -22,7 +29,7 @@ class Warehouse(object):
 def main():
     warehouse = Warehouse()
     #Pyro4.config.HOST = "129.174.126.30:5555"
-    daemon = Pyro4.Daemon(host="129.174.126.30", port=5150)
+    daemon = Pyro4.Daemon()
     Pyro4.Daemon.serveSimple(
             {
                 warehouse: "example.warehouse"

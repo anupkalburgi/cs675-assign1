@@ -3,6 +3,7 @@ from fabric.api import *
 from fabric.contrib.console import confirm
 
 env.user = 'akalburg'
+env.password = ''
 env.always_use_pty = False
 code_dir = '/home/akalburg/github'
 
