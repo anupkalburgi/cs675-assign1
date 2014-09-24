@@ -26,9 +26,9 @@ class CAN_Node(object):
 
     def pyro_node_constructor(self,id,zone,neighbours,hash_table=None):
         if self.id == id:
-            self.zone = zone
-            self.neighbours = neighbours
-            self.hash_table = hash_table
+            self._zone = zone
+            self._neighbours = neighbours
+            self._hash_table = hash_table
         return self
         # Else Will have to raise a exception, because the request was not right
         # Nor raising a Exception can make debugging harder !!!! Ah ok
@@ -88,6 +88,7 @@ class CAN_Node(object):
         if point in self._zone:
             self._zone, new_zone = self._zone.split()
             pyro_node = Pyro4.Proxy('PYRONAME:node.%s'%id)
+            logger.info("Got a remote node to update:{0}".format(pyro_node.id)
             neighbours = self._neighbours + [self]
             new_node = pyro_node.pyro_node_constructor(id, new_zone,neighbours)
             self.update_neighbours(new_node)
