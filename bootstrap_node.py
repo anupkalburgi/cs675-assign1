@@ -13,6 +13,7 @@ BOOTSTRAP_SERVER = "medusa-node1.vsnet.gmu.edu"
 
 Pyro4.config.SERIALIZER = 'pickle'
 Pyro4.config.SERIALIZERS_ACCEPTED.add('pickle')
+Pyro4.config.REQUIRE_EXPOSE = True
 Pyro4.config.DETAILED_TRACEBACK = True
 
 def get_host():

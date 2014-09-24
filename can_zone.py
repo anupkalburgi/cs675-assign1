@@ -1,8 +1,9 @@
 __author__ = 'anupkalburgi'
 
 import math
+import Pyro4
 
-
+@Pyro4.expose
 class Point(object):
     def __init__(self, xy):
         self.x = xy[0]
@@ -14,7 +15,7 @@ class Point(object):
     def __repr__(self):
         return '(%s, %s)' % (self.x, self.x)
 
-
+@Pyro4.expose
 class CAN_Zone(object):
     def __init__(self, xy_min, xy_max):
         # Type assertion makes sense to test the pre-condition invariant but not sure in this case

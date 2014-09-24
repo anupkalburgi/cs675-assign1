@@ -5,7 +5,7 @@ from itertools import ifilterfalse
 import socket
 import Pyro4
 
-
+@Pyro4.expose
 class CAN_Node(object):
 
     def __init__(self, id=None, zone=None):

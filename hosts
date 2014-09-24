@@ -16,7 +16,10 @@
 
 fab bootstrap stop  -f dep_fab.py
 fab bootstrap kill  -f dep_fab.py
-
+fab nodes kill -f dep_fab.py
+fab bootstrap refresh_code -f dep_fab.py
+fab bootstrap bootstrap_deploy -f dep_fab.py
+fab nodes node_deploy -f dep_fab.py
 
 import Pyro4
 Pyro4.config.SERIALIZER = 'pickle'

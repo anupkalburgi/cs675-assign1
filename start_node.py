@@ -5,6 +5,7 @@ from can_node import CAN_Node
 Pyro4.config.SERIALIZER = 'pickle'
 Pyro4.config.SERIALIZERS_ACCEPTED.add('pickle')
 #Pyro4.config.PYRO_LOGFILE = '/home/akalburg/github/logs/errors.log'
+Pyro4.config.REQUIRE_EXPOSE = True
 Pyro4.config.DETAILED_TRACEBACK = True
 '''
 Config:
