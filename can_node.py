@@ -17,8 +17,8 @@ logger.setLevel(logging.INFO)
 @Pyro4.expose
 class CAN_Node(object):
 
-    def __init__(self, id=None, zone=None):
-        self.id = id or id(self)
+    def __init__(self, id, zone=None):
+        self.id = id
         self.zone = zone
         self.hash_table = {}
         self.neighbours = []
