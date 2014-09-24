@@ -87,9 +87,9 @@ class CAN_Node(object):
         print "point:", point, "zone:", self._zone
         if point in self._zone:
             self._zone, new_zone = self._zone.split()
-            pyro_node = Pyro4.Proxy('PYRONAME:node.%s'%id)
-            logger.info("Got a remote node to update:{0}".format(pyro_node.id)
+            pyro_node = Pyro4.Proxy("PYRONAME:node.%s" %id)
             neighbours = self._neighbours + [self]
+            logger.info("Got a remote node to update:{0}".format(pyro_node.id))
             new_node = pyro_node.pyro_node_constructor(id, new_zone,neighbours)
             self.update_neighbours(new_node)
             self.neighbours.append(new_node)
