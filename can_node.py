@@ -7,7 +7,7 @@ import Pyro4
 
 import logging
 logger = logging.getLogger('can_node')
-hdlr = logging.FileHandler('can_node.log')
+hdlr = logging.FileHandler('logs/can_node.log')
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 logger.addHandler(hdlr) 
@@ -18,6 +18,7 @@ logger.setLevel(logging.INFO)
 class CAN_Node(object):
 
     def __init__(self, id, zone=None):
+        logger.info("New Node {0} was created by Can_Node constructor".format(id))
         self.id = id
         self.zone = zone
         self.hash_table = {}
