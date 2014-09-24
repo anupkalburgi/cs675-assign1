@@ -29,6 +29,7 @@ class CAN_Node(object):
             self.zone = zone
             self.neighbours = neighbours
             self.hash_table = hash_table
+        return self
         # Else Will have to raise a exception, because the request was not right
         # Nor raising a Exception can make debugging harder !!!! Ah ok
 
