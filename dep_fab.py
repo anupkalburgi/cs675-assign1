@@ -32,8 +32,11 @@ def bootstrap_deploy():
         #run('export PYRO_SERIALIZERS_ACCEPTED=serpent,json,marshal,pickle') Right now i have it my \
         # in my bash_profile, that will not work at scale
         # Right way of doing it is http://stackoverflow.com/questions/8313238/best-way-to-add-an-environment-variable-in-fabric
+        run("sleep 1")
         run("pyro4-ns --host=%s >& /dev/null < /dev/null &" %env.hosts[0] )
-        run('nohup python %s/bootstrap_node.py  >& /dev/null < /dev/null &' %code_dir)
+        run("sleep 1")
+        run("nohup python %s/bootstrap_node.py" %code_dir)
+        run("sleep 1")
 
 
 def node_deploy():

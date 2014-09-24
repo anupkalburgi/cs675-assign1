@@ -7,7 +7,7 @@ import Pyro4
 
 import logging
 logger = logging.getLogger('myapp')
-hdlr = logging.FileHandler('logs/node.log')
+hdlr = logging.FileHandler('github/logs/node.log')
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 logger.addHandler(hdlr) 
