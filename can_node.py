@@ -120,14 +120,17 @@ class CAN_Node(object):
                 merging_node = valid_merge_nodes[0]
             else:
                 merging_node = min(self._neighbours, key = lambda node: node.zone.area)
+            logger.info(" Slecting from here -->Node {0} selected for merger".format(merging_node.id))
             pyro_node = Pyro4.Proxy("PYRONAME:node.%s" %merging_node.id )
-            logger.info(" Slecting from here -->Node {0} selected for merger".format(pyro_node.id))
+            logger.INFO("PyroNode is %s".format(pyro_node.id))
             pyro_node.zone = self._zone.merge(pyro_node.zone)
             pyro_node.neighbours = self._neighbours + pyro_node.neighbours.remove(self)
-            return pyro_node
+
         else:
             pyro_node = Pyro4.Proxy("PYRONAME:node.{0}".format(id))
-            merging_node = pyro_node.leave(id)
+            pyro_node = pyro_node.leave(id)
+
+        return pyro_node
 
     def insert_file(self):
         pass

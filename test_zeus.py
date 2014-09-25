@@ -8,7 +8,7 @@ Pyro4.config.SERIALIZERS_ACCEPTED.add('pickle')
 Pyro4.config.REQUIRE_EXPOSE = True
 Pyro4.config.DETAILED_TRACEBACK = True
 
-node1 = Pyro4.Proxy('PYRONAME:bootstrap.node')
+node1 = Pyro4.Proxy('PYRONAME:node.1')
 try:
         node2 = obj.join(3)
 except Exception:
