@@ -115,14 +115,14 @@ class CAN_Node(object):
         #Thing is i got to hold a list of node somewhere, or else how would even know what is the xy
         # For a node merge to be proper either it's width or height must be the same or both have to be same
         if self._id == id and self._neighbours:
-            valid_merge_nodes = filter(lambda node:node.zone.is_valid_merge(self.zone), self._neighbours )
+            valid_merge_nodes = filter(lambda node:node.zone.is_valid_merge(self._zone), self._neighbours )
             if valid_merge_nodes:
                 merging_node = valid_merge_nodes[0]
             else:
                 merging_node = min(self._neighbours, key = self._neighbours.zone.area)
             logger.info("Node {0} selected for merger".format(merging_node))
-            merging_node.zone = self.zone.merge(merging_node.zone)
-            merging_node.neighbours = self.neighbours + (merging_node.neighbours - self.neighbours)
+            merging_node.zone = self._zone.merge(merging_node.zone)
+            merging_node.neighbours = self._neighbours + (merging_node.neighbours - self._neighbours)
             return merging_node
         else:
             pyro_node = Pyro4.Proxy("PYRONAME:node.{0}".format(id))
