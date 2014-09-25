@@ -19,7 +19,7 @@ def bootstrap():
     env.hosts = ['medusa-node1.vsnet.gmu.edu']
 
 
-def refresh_code():
+def update():
     with settings(warn_only=True):
         if not run("test -d %s" % code_dir).failed:
             run('rm -rf %s' % code_dir)
