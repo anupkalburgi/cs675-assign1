@@ -124,8 +124,9 @@ class CAN_Node(object):
             pyro_node = Pyro4.Proxy("PYRONAME:node.%s" %merging_node.id )
             logger.info("PyroNode is {0}".format(pyro_node.id))
             logger.info("Pyroobj:{0}".format(pyro_node))
-            pyro_node.zone = self._zone.merge(pyro_node.zone)
-            pyro_node.neighbours = self._neighbours + pyro_node.neighbours.remove(self)
+            new_node = CAN_Node(merging_node.id)
+            new_node.zone = self._zone.merge(pyro_node.zone)
+            new_node.neighbours = self._neighbours + pyro_node.neighbours.remove(self)
 
         else:
             pyro_node = Pyro4.Proxy("PYRONAME:node.{0}".format(id))
