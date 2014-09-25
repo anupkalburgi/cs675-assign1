@@ -120,7 +120,7 @@ class CAN_Node(object):
                 merging_node = valid_merge_nodes[0]
             else:
                 merging_node = min(self._neighbours, key = self._neighbours.zone.area)
-
+            logger.info("Node {0} selected for merger".format(merging_node))
             merging_node.zone = self.zone.merge(merging_node.zone)
             merging_node.neighbours = self.neighbours + (merging_node.neighbours - self.neighbours)
             return merging_node
