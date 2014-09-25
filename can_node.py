@@ -127,7 +127,7 @@ class CAN_Node(object):
             return pyro_node
         else:
             pyro_node = Pyro4.Proxy("PYRONAME:node.{0}".format(id))
-            pyro_node.leave(id)
+            merging_node = pyro_node.leave(id)
 
     def insert_file(self):
         pass
