@@ -16,6 +16,7 @@ class Point(object):
         return '(%s, %s)' % (self.x, self.x)
 
     #Check Idea borowed from http://stackoverflow.com/questions/2303278/find-if-4-points-on-a-plane-form-a-rectangle
+@Pyro4.expose
 def is_rectangle(points):
     if len(points) == 4:
         point1,point2,point3,point4 = points
