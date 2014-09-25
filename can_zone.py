@@ -113,9 +113,9 @@ class CAN_Zone(object):
             return self._hsplit()
 
     def merge(self,zone):
-        x_min = min(self.x,zone.min.x)
-        y_min = min(self.y,self.min.y)
+        x_min = min(self.min.x,zone.min.x)
+        y_min = min(self.min.y,self.min.y)
 
-        x_max = max(self.x,zone.max.x)
-        y_max = max(self.y,zone.max.y)
+        x_max = max(self.max.x,zone.max.x)
+        y_max = max(self.max.y,zone.max.y)
         return CAN_Zone((x_min,y_min),(x_max,y_max))
