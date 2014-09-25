@@ -120,10 +120,11 @@ class CAN_Node(object):
                 merging_node = valid_merge_nodes[0]
             else:
                 merging_node = min(self._neighbours, key = self._neighbours.zone.area)
-            logger.info("Node {0} selected for merger".format(merging_node))
-            merging_node.zone = self._zone.merge(merging_node.zone)
-            merging_node.neighbours = self._neighbours + (merging_node.neighbours - self._neighbours)
-            return merging_node
+            pyro_node = Pyro4.Proxy("PYRONAME:node.{0}".format(merging_node.id))
+            logger.info("Node {0} selected for merger".format(pyro_node.id))
+            pyro_node.zone = self._zone.merge(pyro_node.zone)
+            pyro_node.neighbours = self._neighbours + (pyro_node.neighbours - self._neighbours)
+            return pyro_node
         else:
             pyro_node = Pyro4.Proxy("PYRONAME:node.{0}".format(id))
             pyro_node.leave(id)
