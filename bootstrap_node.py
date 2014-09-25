@@ -26,7 +26,7 @@ def main():
     daemon = Pyro4.Daemon(host=get_host(), port=5150);
     node_uri = daemon.register(node)
     ns = Pyro4.locateNS(host='medusa-node1.vsnet.gmu.edu', port=9090)
-    ns.register("bootstrap.node", node_uri)
+    ns.register("node.%s", id )
     print "node."+str(node.id)
     print("Can Node running.")
     daemon.requestLoop()

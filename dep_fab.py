@@ -8,7 +8,8 @@ env.always_use_pty = False
 code_dir = '/home/akalburg/github'
 
 def nodes():
-    env.hosts = ['medusa-node2.vsnet.gmu.edu',\
+    env.hosts = ['medusa-node1.vsnet.gmu.edu',\
+                 'medusa-node2.vsnet.gmu.edu',\
                  'medusa-node3.vsnet.gmu.edu',\
                  'medusa-node4.vsnet.gmu.edu',\
                  'medusa-node5.vsnet.gmu.edu']
