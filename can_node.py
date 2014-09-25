@@ -111,13 +111,22 @@ class CAN_Node(object):
     def _merge(self):
         pass
 
-    def leave(self):
-        #Thing is i got to hold a list of node somewhere, ya or else how would even know what is the xy
+    def leave(self,id):
+        #Thing is i got to hold a list of node somewhere, or else how would even know what is the xy
         # For a node merge to be proper either it's width or height must be the same or both have to be same
-        mergeing_node = min(self.neighbours, key = self.neighbours.zone.area)
-        mergeing_node.zone = self.zone.merge(mergeing_node.zone)
-        mergeing_node.neighbours = self.neighbours + (mergeing_node.neighbours - self.neighbours)
-        return mergeing_node
+        if self._id == id and self._neighbours:
+            valid_merge_nodes = filter(lambda node:node.zone.is_valid_merge(self.zone), self._neighbours )
+            if valid_merge_nodes:
+                merging_node = valid_merge_nodes[0]
+            else:
+                merging_node = min(self._neighbours, key = self._neighbours.zone.area)
+
+            merging_node.zone = self.zone.merge(merging_node.zone)
+            merging_node.neighbours = self.neighbours + (merging_node.neighbours - self.neighbours)
+            return merging_node
+        else:
+            pyro_node = Pyro4.Proxy("PYRONAME:node.{0}".format(id))
+            pyro_node.leave(id)
 
     def insert_file(self):
         pass

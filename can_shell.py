@@ -1,5 +1,15 @@
 import cmd
 import Pyro4
+from can_node import CAN_Node
+from can_zone import CAN_Zone
+
+
+Pyro4.config.SERIALIZER = 'pickle'
+Pyro4.config.SERIALIZERS_ACCEPTED.add('pickle')
+Pyro4.config.REQUIRE_EXPOSE = True
+Pyro4.config.DETAILED_TRACEBACK = True
+
+
 
 class CANSHELL(cmd.Cmd):
     prompt = 'canshell:-> '
@@ -21,7 +31,11 @@ class CANSHELL(cmd.Cmd):
         print self.nameserver
         self.prompt = line + ': '
 
-    def join(self):
+    def do_join(self):
+        node1 = Pyro4.Proxy('PYRONAME:bootstrap.node')
+        #Get the key,
+        id = 'Raw input'
+        new_node = node1.join(id)
         pass
 
     def do_EOF(self, line):

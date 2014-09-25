@@ -15,6 +15,23 @@ class Point(object):
     def __repr__(self):
         return '(%s, %s)' % (self.x, self.x)
 
+    #Check Idea borowed from http://stackoverflow.com/questions/2303278/find-if-4-points-on-a-plane-form-a-rectangle
+def is_rectangle(points):
+    if len(points) == 4:
+        point1,point2,point3,point4 = points
+        cx = (point1[0]+point2[0]+point3[0]+point4[0])/4
+        cy = (point1[1]+point2[1]+point3[1]+point4[1])/4
+
+        dd1 = pow((cx-point1[0]), 2) + pow((cy-point1[1]), 2)
+        dd2 = pow((cx-point2[0]), 2) + pow((cy-point2[1]), 2)
+        dd3 = pow((cx-point3[0]), 2) + pow((cy-point3[1]), 2)
+        dd4 = pow((cx-point4[0]), 2) + pow((cy-point4[1]), 2)
+
+        return dd1 == dd2 and dd1 == dd3 and dd1 == dd4
+    else:
+        return False
+
+
 @Pyro4.expose
 class CAN_Zone(object):
     def __init__(self, xy_min, xy_max):
@@ -57,6 +74,13 @@ class CAN_Zone(object):
                 (self.max.x, self.min.y),
                 (self.min.x, self.max.y),
                 (self.max.x, self.max.y)]
+
+    def is_valid_merge(self,zone):
+        all_sides = self.sides() + zone.sides()
+        common_sides = set(self.sides()).intersection(zone.sides())
+        sides = set(all_sides) - common_sides
+        return is_rectangle(list(sides))
+
 
     @staticmethod
     def distance_cal(point1, point2):
