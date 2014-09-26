@@ -127,13 +127,15 @@ class CAN_Node(object):
             zone = self._zone.merge(pyro_node.zone)
             neighbours = list(set(self._neighbours + pyro_node.neighbours))
             logger.info(zone)
-            logger.info(neighbours)
+            if self in  neighbours:
+                neighbours.remove(self)
+            merged_node = pyro_node.pyro_node_constructor(id,zone,neighbours)
 
         else:
             pyro_node = Pyro4.Proxy("PYRONAME:node.{0}".format(id))
-            pyro_node = pyro_node.leave(id)
+            merged_node = pyro_node.leave(id)
 
-        return pyro_node
+        return merged_node
 
     def insert_file(self):
         pass
