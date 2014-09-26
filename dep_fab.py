@@ -49,5 +49,9 @@ def kill():
 def stop():
     run("fuser -k 9090/tcp;sleep 1")
 
+def shut_down():
+    kill()
+    stop()
+
 
 

@@ -27,12 +27,15 @@ class CANSHELL(cmd.Cmd):
         print "Name Lookup services connected at {0}".format(self.nameserver._pyroUri.location)
 
 
-    def do_join(self,arg):
+    def do_join(self,s):
         node1 = Pyro4.Proxy('PYRONAME:node.1')
-        #Get the key,
-        print arg
-        new_node = node1.join(int(arg))
-        pass
+        new_node = node1.join(int(s))
+        print new_node.zone,new_node.neighbours
+
+    def do_leave(self,s):
+        node1 = Pyro4.Proxy('PYRONAME:node.1')
+        new_node = node1.leave(int(s))
+        print new_node.zone,new_node.neighbours
 
     def do_EOF(self, line):
         return True
