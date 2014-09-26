@@ -84,6 +84,18 @@ class CAN_Node(object):
         #Might be i should just sort ? or using a min function and mention ke !!!!!
         return min(self._neighbours, key=lambda node: node.zone.distance(point))
 
+    def _split_hash_table(self,new_zone):
+        old_zone = {}
+        new_zone = {}
+        for k,v in self._hash_table.iteritems():
+            if self.get_coordinates_for_key_word(k) in self._zone:
+                old_zone[k] = v
+            else:
+                new_zone[k] = v
+        return old_zone, new_zone
+
+
+
     def join(self, id, point=None):
         #Generate random x,y for the given node,Use self.zone to divide and assign it to the new node
         if not point:
@@ -92,10 +104,11 @@ class CAN_Node(object):
         print "point:", point, "zone:", self._zone
         if point in self._zone:
             self._zone, new_zone = self._zone.split()
+            self._hash_table, new_hash_table = self._split_hash_table(new_zone)
             pyro_node = Pyro4.Proxy("PYRONAME:node.%s" %id)
             neighbours = self._neighbours + [self]
             logger.info("Got a remote node to update:{0}".format(pyro_node.id))
-            new_node = pyro_node.pyro_node_constructor(id, new_zone,neighbours)
+            new_node = pyro_node.pyro_node_constructor(id, new_zone,neighbours,new_hash_table)
             self.update_neighbours(new_node)
             self._neighbours.append(new_node)
             print "Finished Join"
@@ -114,10 +127,11 @@ class CAN_Node(object):
         node =  Pyro4.Proxy("PYRONAME:node.{0}".format(id))
         return node
 
-    def remote_updater(self,zone,new_neighbours):
+    def remote_updater(self,zone,new_neighbours,hash_table):
         logger.info("Node Gettting updated via leave {0}".format(self._id))
         self._zone = zone
         self._neighbours = new_neighbours
+        self._hash_table = hash_table
         return self
 
     def leave(self,id):
@@ -133,16 +147,17 @@ class CAN_Node(object):
 
             logger.info(" Slecting from here -->Node {0} selected for merger".format(merging_node.id))
             logger.info("Pyroobj:{0}".format(merging_node.id))
+
             new_zone = self._zone.merge(merging_node.zone)
             new_neighbours = list(set(self._neighbours + merging_node.neighbours))
-
+            new_hash_table = self._hash_table.update(merging_node.hash_table)
             new_neighbours = [node for node in new_neighbours if node.id != self._id ]
             new_neighbours = [node for node in new_neighbours if node.id != merging_node.id ]
 
             #Still have to update neighbours
             logger.info("New zone is {0} along with new neighbours {1}".format(new_zone,new_neighbours))
             pyro_node = Pyro4.Proxy("PYRONAME:node.%s" %merging_node.id )
-            merged_node = pyro_node.remote_updater(new_zone,new_neighbours)
+            merged_node = pyro_node.remote_updater(new_zone,new_neighbours,new_hash_table)
             logger.info("New With zone {0}".format(merged_node.zone))
             logger.info("Megre Finished")
 
