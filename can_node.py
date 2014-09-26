@@ -175,7 +175,7 @@ class CAN_Node(object):
             y = y + ord(i)
         y = y % 10
 
-        return Point(x,y)
+        return Point((x,y))
 
 
     def insert_file(self,keyword,filename,point=None):
