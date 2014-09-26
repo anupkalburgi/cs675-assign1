@@ -112,6 +112,12 @@ class CAN_Node(object):
     def _merge(self):
         pass
 
+    def remote_updater(self,zone,new_neighbours):
+        logger.info("Node Gettting updated via leave {0}".format(self._id))
+        self._zone = zone
+        self._neighbours = new_neighbours
+        return self
+
     def leave(self,id):
         #Thing is i got to hold a list of node somewhere, or else how would even know what is the xy
         # For a node merge to be proper either it's width or height must be the same or both have to be same
@@ -133,7 +139,7 @@ class CAN_Node(object):
                 new_neighbours.remove(self)
 
             pyro_node = Pyro4.Proxy("PYRONAME:node.%s" %merging_node.id )
-            merged_node = pyro_node.pyro_node_constructor(id,new_zone,new_neighbours)
+            merged_node = pyro_node.remote_updater(new_zone,new_neighbours)
             logger.info("New With zone {0}".format(merged_node.zone))
             logger.info("Megre Finished")
 
