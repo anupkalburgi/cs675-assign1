@@ -145,17 +145,18 @@ class CAN_Node(object):
                 merging_node = min(self._neighbours, key = lambda node: node.zone.area)
 
 
-            logger.info(" Slecting from here -->Node {0} selected for merger".format(merging_node.id))
-            logger.info("Pyroobj:{0}".format(merging_node.id))
+            logger.info(" Selecting from here -->Node {0} selected for merger".format(merging_node.id))
+            logger.info("Pyr-obj:{0}".format(merging_node.id))
 
             new_zone = self._zone.merge(merging_node.zone)
-            new_neighbours = list(set(self._neighbours + merging_node.neighbours))
             new_hash_table = self._hash_table.update(merging_node.hash_table)
+
+            new_neighbours = list(set(self._neighbours + merging_node.neighbours))
             new_neighbours = [node for node in new_neighbours if node.id != self._id ]
             new_neighbours = [node for node in new_neighbours if node.id != merging_node.id ]
 
             #Still have to update neighbours
-            logger.info("New zone is {0} along with new neighbours {1}".format(new_zone,new_neighbours))
+            logger.info("New zone is {0} along with new neighbours {1} and hashtable {2} ".format(new_zone,new_neighbours,new_hash_table))
             pyro_node = Pyro4.Proxy("PYRONAME:node.%s" %merging_node.id )
             merged_node = pyro_node.remote_updater(new_zone,new_neighbours,new_hash_table)
             logger.info("New With zone {0}".format(merged_node.zone))
@@ -202,6 +203,7 @@ class CAN_Node(object):
             point = self.get_coordinates_for_key_word(keyword)
         if point in self._zone:
             self._hash_table[keyword] = filename
+            return self._id
         else:
             logger.info("File Insertion point {0} ".format(point))
             next_node = self._next_best_node(point)
@@ -209,7 +211,6 @@ class CAN_Node(object):
             logger.info("PyroNode:{0} is being connected, for keyword insertion".format(pyro_node))
             pyro_node.insert_file(keyword,filename,point)
 
-        return self._id
 
     def search(self):
         pass
