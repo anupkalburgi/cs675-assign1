@@ -135,17 +135,14 @@ class CAN_Node(object):
             new_neighbours = list(set(self._neighbours + merging_node.neighbours))
 
             if self in new_neighbours:
+                logger.info("Found in:{0}".format(self))
                 new_neighbours.remove(self)
 
             if merging_node in new_neighbours:
                 new_neighbours.remove(merging_node)
 
             #Still have to update neighbours
-
             logger.info("New zone is {0} along with new neighbours {1}".format(new_zone,new_neighbours))
-            if self in  new_neighbours:
-                new_neighbours.remove(self)
-
             pyro_node = Pyro4.Proxy("PYRONAME:node.%s" %merging_node.id )
             merged_node = pyro_node.remote_updater(new_zone,new_neighbours)
             logger.info("New With zone {0}".format(merged_node.zone))
