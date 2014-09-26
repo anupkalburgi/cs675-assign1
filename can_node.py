@@ -97,7 +97,7 @@ class CAN_Node(object):
             logger.info("Got a remote node to update:{0}".format(pyro_node.id))
             new_node = pyro_node.pyro_node_constructor(id, new_zone,neighbours)
             self.update_neighbours(new_node)
-            self.neighbours.append(new_node)
+            self._neighbours.append(new_node)
             print "Finished Join"
 
         else:
@@ -187,15 +187,15 @@ class CAN_Node(object):
             point = self.get_coordinates_for_key_word(keyword)
         if point in self._zone:
             self._hash_table['keyword'] = filename
+            id = self._id
         else:
             logger.info("File Insertion point {0} ".format(point))
             next_node = self._next_best_node(point)
             pyro_node = Pyro4.Proxy('PYRONAME:node.%s'%next_node.id)
             logger.info("PyroNode:{0} is being connected, for keyword insertion".format(pyro_node))
-            pyro_node.insert_file(keyword,filename,point)
+            id = pyro_node.insert_file(keyword,filename,point)
 
-
-        pass
+        return
 
     def search(self):
         pass
