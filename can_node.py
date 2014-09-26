@@ -130,6 +130,7 @@ class CAN_Node(object):
             if self in  new_neighbours:
                 new_neighbours.remove(self)
             merged_node = pyro_node.pyro_node_constructor(id,new_zone,new_neighbours)
+            logger.info("New With zone {0}".format(merged_node.zone))
             self = merged_node
             logger.info("Megre Finished")
 
