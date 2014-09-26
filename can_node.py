@@ -135,6 +135,7 @@ class CAN_Node(object):
             new_neighbours = list(set(self._neighbours + merging_node.neighbours))
 
             new_neighbours = [node for node in new_neighbours if node.id != self._id ]
+            new_neighbours = [node for node in new_neighbours if node.id != merging_node.id ]
 
             #Still have to update neighbours
             logger.info("New zone is {0} along with new neighbours {1}".format(new_zone,new_neighbours))
