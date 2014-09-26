@@ -29,7 +29,7 @@ class CAN_Node(object):
         if self._id == id:
             self._zone = zone
             self._neighbours = neighbours
-            self._hash_table = hash_table
+            self._hash_table = hash_table or {}
         return self
         # Else Will have to raise a exception, because the request was not right
         # Nor raising a Exception can make debugging harder !!!! Ah ok
