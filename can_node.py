@@ -148,7 +148,47 @@ class CAN_Node(object):
 
         return merged_node
 
-    def insert_file(self):
+    def get_odd_positions(self,keyword):
+        word = []
+        for count,i in enumerate(list(keyword)):
+            if count % 2 == 1:
+                word.append(i)
+
+    def get_even_positions(self,keyword):
+        word = []
+        for count,i in enumerate(list(keyword)):
+            if count % 2 == 0:
+                word.append(i)
+
+    def get_coordinates_for_key_word(self,keyword):
+        char_odd = self.get_odd_positions(keyword)
+        char_even = self.get_even_positions(keyword )
+        x = 0
+        for i in char_odd:
+            x = x + ord(i)
+        x = x % 10
+
+        y = 0
+        for i in char_even:
+            y = y + ord(i)
+        y = y % 10
+
+        return Point(x,y)
+
+
+    def insert_file(self,keyword,filename,point=None):
+        if not point:
+            point = self.get_coordinates_for_key_word(keyword)
+        if point in self._zone:
+            self._hash_table['keyword'] = filename
+        else:
+            logger.info("File Insertion point {0} ".format(point))
+            next_node = self._next_best_node(point)
+            pyro_node = Pyro4.Proxy('PYRONAME:node.%s'%next_node.id)
+            logger.info("PyroNode:{0} is being connected, for keyword insertion".format(pyro_node))
+            pyro_node.insert_file(keyword,filename,point)
+
+
         pass
 
     def search(self):
