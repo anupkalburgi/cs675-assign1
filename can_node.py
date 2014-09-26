@@ -153,12 +153,14 @@ class CAN_Node(object):
         for count,i in enumerate(list(keyword)):
             if count % 2 == 1:
                 word.append(i)
+        return word
 
     def get_even_positions(self,keyword):
         word = []
         for count,i in enumerate(list(keyword)):
             if count % 2 == 0:
                 word.append(i)
+        return word
 
     def get_coordinates_for_key_word(self,keyword):
         char_odd = self.get_odd_positions(keyword)
