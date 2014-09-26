@@ -134,12 +134,7 @@ class CAN_Node(object):
             new_zone = self._zone.merge(merging_node.zone)
             new_neighbours = list(set(self._neighbours + merging_node.neighbours))
 
-            if self in new_neighbours:
-                logger.info("Found in:{0}".format(self))
-                new_neighbours.remove(self)
-
-            if merging_node in new_neighbours:
-                new_neighbours.remove(merging_node)
+            new_neighbours = [node for node in new_neighbours if node.id != self._id or node.id != merging_node.id ]
 
             #Still have to update neighbours
             logger.info("New zone is {0} along with new neighbours {1}".format(new_zone,new_neighbours))
