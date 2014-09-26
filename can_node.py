@@ -25,7 +25,8 @@ class CAN_Node(object):
         self._neighbours = []
 
     def pyro_node_constructor(self,id,zone,neighbours,hash_table=None):
-        if self.id == id:
+        logger.info("Zone Value in Constructor:{0}".format(zone))
+        if self._id == id:
             self._zone = zone
             self._neighbours = neighbours
             self._hash_table = hash_table
