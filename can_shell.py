@@ -26,16 +26,12 @@ class CANSHELL(cmd.Cmd):
         self.nameserver = Pyro4.locateNS(host='medusa-node1.vsnet.gmu.edu')
         print "Name Lookup services connected at {0}".format(self.nameserver._pyroUri.location)
 
-    def do_prompt(self, line):
-        "Change the interactive prompt"
-        print self.nameserver
-        self.prompt = line + ': '
 
-    def do_join(self):
-        node1 = Pyro4.Proxy('PYRONAME:bootstrap.node')
+    def do_join(self,arg):
+        node1 = Pyro4.Proxy('PYRONAME:node.1')
         #Get the key,
-        id = 'Raw input'
-        new_node = node1.join(id)
+        print arg
+        new_node = node1.join(int(arg))
         pass
 
     def do_EOF(self, line):
