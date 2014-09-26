@@ -106,11 +106,9 @@ class CAN_Node(object):
 
         return new_node
 
-    def view(self):
-        pass
-
-    def _merge(self):
-        pass
+    def view(self,id):
+        node =  Pyro4.Proxy("PYRONAME:node.{0}".format(id))
+        return node
 
     def remote_updater(self,zone,new_neighbours):
         logger.info("Node Gettting updated via leave {0}".format(self._id))
