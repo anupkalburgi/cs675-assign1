@@ -47,6 +47,10 @@ class CAN_Node(object):
     def neighbours(self):
         return self._neighbours
 
+    @property
+    def hash_table(self):
+        return self._hash_table
+
     @staticmethod
     def can_node_point():
         return Point((random.randint(0, 10), random.randint(0, 10)))
