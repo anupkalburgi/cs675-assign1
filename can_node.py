@@ -133,6 +133,7 @@ class CAN_Node(object):
                     to_visit = []
                 to_visit.append(list(set(self._neighbours) - set(visited)))
             else:
+                visited = []
                 to_visit = self._neighbours
 
             if to_visit:
