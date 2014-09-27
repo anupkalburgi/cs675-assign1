@@ -111,7 +111,7 @@ class CAN_Node(object):
             new_node = pyro_node.pyro_node_constructor(id, new_zone,neighbours,new_hash_table)
             self.update_neighbours(new_node)
             self._neighbours.append(new_node)
-            print "Finished Join"
+            logger.info("Finished Join")
 
         else:
             logger.info("Point {0} was not found in zone {1}".format(point, self._zone))
