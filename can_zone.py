@@ -115,7 +115,7 @@ class CAN_Zone(object):
 
     def merge(self,zone):
         x_min = min(self.min.x,zone.min.x)
-        y_min = min(self.min.y,self.min.y)
+        y_min = min(self.min.y,zone.min.y)
 
         x_max = max(self.max.x,zone.max.x)
         y_max = max(self.max.y,zone.max.y)
