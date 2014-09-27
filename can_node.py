@@ -216,6 +216,18 @@ class CAN_Node(object):
             pyro_node.insert_file(keyword,filename,point)
 
 
-    def search(self):
-        pass
+    def search(self,keyword,point=None):
+        if not point:
+            point = self.get_coordinates_for_key_word(keyword)
+        if point in self._zone:
+            if self._hash_table.get(keyword):
+                return self._id
+            else:
+                return "Searched File not found, search landed on to node {0}".format(self._id)
+        else:
+            next_node = self._next_best_node(point)
+            pyro_node = Pyro4.Proxy('PYRONAME:node.%s'%next_node.id)
+            pyro_node.search(keyword,point)
+
+
 
