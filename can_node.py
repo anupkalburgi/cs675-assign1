@@ -141,7 +141,7 @@ class CAN_Node(object):
             logger.info("Leave Method for {0}".format(id))
             valid_merge_nodes = filter(lambda node: node.zone.is_valid_merge(self._zone), self._neighbours )
             if valid_merge_nodes:
-                merging_node = valid_merge_nodes[0]
+                merging_node = min(valid_merge_nodes, key = lambda node: node.zone.area)
             else:
                 merging_node = min(self._neighbours, key = lambda node: node.zone.area)
 
