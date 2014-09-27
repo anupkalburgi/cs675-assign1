@@ -138,6 +138,7 @@ class CAN_Node(object):
         #Thing is i got to hold a list of node somewhere, or else how would even know what is the xy
         # For a node merge to be proper either it's width or height must be the same or both have to be same
         if self._id == id:
+            logger.info("Leave Method for {0}".format(id))
             valid_merge_nodes = filter(lambda node: node.zone.is_valid_merge(self._zone), self._neighbours )
             if valid_merge_nodes:
                 merging_node = valid_merge_nodes[0]
@@ -149,7 +150,10 @@ class CAN_Node(object):
             logger.info("Pyr-obj:{0}".format(merging_node.id))
 
             new_zone = self._zone.merge(merging_node.zone)
-            new_hash_table = self._hash_table.update(merging_node.hash_table)
+            new_hash_table = self._hash_table
+            logger.info("Self Hash Table:{0}".format(self._hash_table))
+            logger.info("Merging Hash Table:{0}".format(merging_node.hash_table ))
+            new_hash_table.update(merging_node.hash_table)
 
             new_neighbours = list(set(self._neighbours + merging_node.neighbours))
             new_neighbours = [node for node in new_neighbours if node.id != self._id ]
