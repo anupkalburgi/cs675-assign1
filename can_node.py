@@ -139,10 +139,10 @@ class CAN_Node(object):
             if to_visit:
                 next_visit = min(to_visit, key=lambda n_node:n_node.id)
                 if next_visit:
-                    pyro_node = Pyro4.Proxy('PYRONAME:node.%s'%next_visit.id)
                     visited.append(self)
+                    pyro_node = Pyro4.Proxy('PYRONAME:node.%s'%next_visit.id)
                     visited = pyro_node.view(visited,to_visit)
-            return visited
+        return visited
 
 
     def remote_updater(self,zone,new_neighbours,hash_table):
