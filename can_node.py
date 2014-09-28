@@ -143,7 +143,7 @@ class CAN_Node(object):
                 visited = pyro_node.view(visited, to_visit,run)
                 logger.info("Got across the call may be ? to {0}".format(next_visit.id))
 
-            return visited
+        return visited
 
 
     def remote_updater(self,zone,new_neighbours,hash_table):
