@@ -140,6 +140,7 @@ class CAN_Node(object):
                 next_visit = min(to_visit, key=lambda n_node:n_node.id)
                 if next_visit:
                     visited.append(self)
+                    logger.info("View moving on to {0}".format(next_visit._id))
                     pyro_node = Pyro4.Proxy('PYRONAME:node.%s'%next_visit.id)
                     visited = pyro_node.view(visited,to_visit)
         return visited
