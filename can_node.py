@@ -124,6 +124,7 @@ class CAN_Node(object):
         return new_node
 
     def view(self,id= None, visited=None,to_visit= None ):
+        logger.info("View for node {0}".format(self._id))
         if id:
             node =  Pyro4.Proxy("PYRONAME:node.{0}".format(id))
             return node
@@ -144,7 +145,7 @@ class CAN_Node(object):
                 if next_visit:
                     logger.info("View moving on to {0}".format(next_visit.id))
                     pyro_node = Pyro4.Proxy("PYRONAME:node.%s" % next_visit.id)
-                    logger.info("Conected to {0} with lenght {1} with type {2}".format(pyro_node.id,len(pyro_node), type(pyro_node) ))
+                    logger.info("Connected to {0} with type {1}".format(pyro_node.id, type(pyro_node) ))
                     pyro_node.view(visited, to_visit)
                     logger.info("Got across the call may be ? to {0}".format(next_visit.id))
         return visited
