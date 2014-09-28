@@ -125,30 +125,25 @@ class CAN_Node(object):
 
     def view(self,id= None, visited=None,to_visit= None ):
         logger.info("View for node {0}".format(self._id))
-        if id:
-            node =  Pyro4.Proxy("PYRONAME:node.{0}".format(id))
-            return node
+        if visited:
+            to_visit.append(list(set(self._neighbours) - set(visited)))
         else:
-            if visited:
-                if not to_visit:
-                    to_visit = []
-                to_visit.append(list(set(self._neighbours) - set(visited)))
-            else:
-                visited = []
-                to_visit = self._neighbours
+            visited = []
+            to_visit = self._neighbours
 
-            if to_visit:
-                if self in to_visit:
-                    to_visit.remove(self)
-                visited.append(self)
-                next_visit = min(to_visit, key=lambda n_node:n_node.id)
-                if next_visit:
-                    logger.info("View moving on to {0}".format(next_visit.id))
-                    pyro_node = Pyro4.Proxy("PYRONAME:node.%s" % next_visit.id)
-                    logger.info("Connected to {0} with type {1}".format(pyro_node.id, type(pyro_node) ))
-                    pyro_node.view(visited, to_visit)
-                    logger.info("Got across the call may be ? to {0}".format(next_visit.id))
-        return visited
+        if to_visit:
+            if self in to_visit:
+                to_visit.remove(self)
+            visited.append(self)
+            next_visit = min(to_visit, key=lambda n_node:n_node.id)
+            if next_visit:
+                logger.info("View moving on to {0}".format(next_visit.id))
+                pyro_node = Pyro4.Proxy("PYRONAME:node.%s" % next_visit.id)
+                logger.info("Connected to {0} with type {1}".format(pyro_node.id, pyro_node._pyroUri ))
+                visited= pyro_node.view(visited, to_visit)
+                logger.info("Got across the call may be ? to {0}".format(next_visit.id))
+            else:
+                return visited
 
 
     def remote_updater(self,zone,new_neighbours,hash_table):
