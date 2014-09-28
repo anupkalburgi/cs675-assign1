@@ -124,12 +124,6 @@ class CAN_Node(object):
 
     def view(self, visited=None,to_visit= None, run=0 ):
         logger.info("View for node {0}".format(self._id))
-        if to_visit and self._neighbours:
-            logger.info("Visiting {0}".format(self._id))
-            to_visit = filter(lambda node: node.id != self._id,to_visit)
-            visited.append(self)
-            to_visit = to_visit + list(set( visited + self._neighbours )^set(visited))
-            logger.info("Still have to_visit {0} and visited {1}".format(to_visit,visited))
 
 
         if run == 0:
@@ -137,11 +131,18 @@ class CAN_Node(object):
             to_visit = self._neighbours
             run = 1
 
+        if to_visit and self._neighbours:
+            logger.info("Visiting {0}".format(self._id))
+            to_visit = filter(lambda node: node.id != self._id,to_visit)
+            visited.append(self)
+            to_visit = to_visit + list(set( visited + self._neighbours )^set(visited))
+            logger.info("Still have to_visit {0} and visited {1}".format(to_visit,visited))
+
         if to_visit:
             next_visit = min(to_visit, key=lambda n_node:n_node.id)
             pyro_node = Pyro4.Proxy("PYRONAME:node.%s" % next_visit.id)
             logger.info("Next view HOP to".format(pyro_node.id))
-            pyro_node.view(visited, to_visit,run)
+            visited = pyro_node.view(visited, to_visit,run)
 
         return visited
 
