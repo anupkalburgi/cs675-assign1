@@ -142,8 +142,8 @@ class CAN_Node(object):
                 logger.info("Connected to {0} with type {1}".format(pyro_node.id, pyro_node._pyroUri ))
                 visited= pyro_node.view(visited, to_visit)
                 logger.info("Got across the call may be ? to {0}".format(next_visit.id))
-            else:
-                return visited
+
+        return visited
 
 
     def remote_updater(self,zone,new_neighbours,hash_table):
