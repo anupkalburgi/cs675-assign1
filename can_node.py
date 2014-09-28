@@ -126,7 +126,7 @@ class CAN_Node(object):
         logger.info("View for node {0}".format(self._id))
         if to_visit and self._neighbours:
             logger.info("Visiting {0}".format(self._id))
-            to_visit = filter(lambda node: node.id!= self._id,to_visit)
+            to_visit = filter(lambda node: node.id != self._id,to_visit)
             to_visit = set(to_visit + list(set(self._neighbours)^set(visited)))
             logger.info("Still have to_visit {0} and visited {1}".format(to_visit,visited))
 
@@ -139,15 +139,14 @@ class CAN_Node(object):
             #to_visit = [node for node in to_visit if self._id != node.id ]
             if to_visit:
                 next_visit = min(to_visit, key=lambda n_node:n_node.id)
-                logger.info("Visted list Now {0}".format(visited))
                 visited.append(self)
                 logger.info("View moving on to Min() Node {0}".format(next_visit.id))
                 pyro_node = Pyro4.Proxy("PYRONAME:node.%s" % next_visit.id)
                 logger.info("Connected to {0} with type {1}".format(pyro_node.id, pyro_node._pyroUri ))
                 pyro_node.view(visited, to_visit,run)
                 logger.info("Got across the call may be ? to {0}".format(next_visit.id))
-            else:
-                return visited
+
+        return visited
 
 
     def remote_updater(self,zone,new_neighbours,hash_table):
