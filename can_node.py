@@ -139,10 +139,12 @@ class CAN_Node(object):
             #to_visit = [node for node in to_visit if self._id != node.id ]
             if to_visit:
                 next_visit = min(to_visit, key=lambda n_node:n_node.id)
+                logger.info("Visted list Now {0}".format(visited))
+                visited.append(self)
                 logger.info("View moving on to Min() Node {0}".format(next_visit.id))
                 pyro_node = Pyro4.Proxy("PYRONAME:node.%s" % next_visit.id)
                 logger.info("Connected to {0} with type {1}".format(pyro_node.id, pyro_node._pyroUri ))
-                visited  =  visited + pyro_node.view(visited, to_visit,run)
+                pyro_node.view(visited, to_visit,run)
                 logger.info("Got across the call may be ? to {0}".format(next_visit.id))
             else:
                 return visited
