@@ -123,25 +123,18 @@ class CAN_Node(object):
 
         return new_node
 
-    def view(self,id= None, visited=None,to_visit= None, run=1 ):
+    def view(self,id= None, visited=None,to_visit= None, run=0 ):
         logger.info("View for node {0}".format(self._id))
         if visited and to_visit:
-            #to_visit = to_visit + self._neighbours
-            for ngh in self._neighbours:
-                if ngh not in visited:
-                    to_visit.append(ngh)
-        if run == 1:
+            to_vist = to_visit + [node for node in self._neighbours if node.id != visited.id ]
+
+
+        if run == 0:
             visited = [self]
             to_visit = self._neighbours
-            run = run + 1
+            run = 1
 
-        if to_visit:
-            new_to_visit = []
-            for node in to_visit:
-                if node.id != self._id:
-                    new_to_visit.append(node)
-
-            to_visit = new_to_visit
+            to_visit = [node for node in to_visit if self._id != node.id ]
 
             next_visit = min(to_visit, key=lambda n_node:n_node.id)
             if next_visit:
