@@ -124,7 +124,7 @@ class CAN_Node(object):
 
     def view(self, visited=None,to_visit= None, run=0 ):
         logger.info("View for node {0}".format(self._id))
-        if len(visited) and len(to_visit) and len(self._neighbours):
+        if visited and to_visit and self._neighbours:
             logger.info("".format(self._id))
             to_visit = to_visit + list(set(self._neighbours)^set(visited))
 
