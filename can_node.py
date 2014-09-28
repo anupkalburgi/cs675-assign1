@@ -34,7 +34,6 @@ class CAN_Node(object):
         # Else Will have to raise a exception, because the request was not right
         # Nor raising a Exception can make debugging harder !!!! Ah ok
 
-
     @property
     def id(self):
         return self._id
@@ -125,8 +124,8 @@ class CAN_Node(object):
 
     def view(self,id= None, visited=None,to_visit= None, run=0 ):
         logger.info("View for node {0}".format(self._id))
-        if visited and to_visit:
-            to_vist = to_visit + [node for node in self._neighbours if node.id != visited.id ]
+        if visited and to_visit and self._neighbours:
+            to_visit = to_visit + list(set(self._neighbours)^set(visited))
 
 
         if run == 0:
