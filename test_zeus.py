@@ -11,7 +11,7 @@ Pyro4.config.DETAILED_TRACEBACK = True
 node1 = Pyro4.Proxy('PYRONAME:node.1')
 node2 = node1.join(2)
 try:
-        node = node2.view(3)
+        node = node2.view()
 except Exception:
         print "".join(Pyro4.util.getPyroTraceback())
 try:
