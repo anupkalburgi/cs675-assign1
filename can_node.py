@@ -125,8 +125,8 @@ class CAN_Node(object):
     def view(self, visited=None,to_visit= None, run=0 ):
         logger.info("View for node {0}".format(self._id))
         if to_visit and self._neighbours:
-            logger.info("".format(self._id))
-            to_visit.remove(self)
+            logger.info("Visiting {0}".format(self._id))
+            to_visit = filter(lambda node: node.id!= self._id,to_visit)
             to_visit = set(to_visit + list(set(self._neighbours)^set(visited)))
             logger.info("Still have to_visit {0} and visited {1}".format(to_visit,visited))
 
