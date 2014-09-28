@@ -140,7 +140,7 @@ class CAN_Node(object):
                 logger.info("View moving on to Min() Node {0}".format(next_visit.id))
                 pyro_node = Pyro4.Proxy("PYRONAME:node.%s" % next_visit.id)
                 logger.info("Connected to {0} with type {1}".format(pyro_node.id, pyro_node._pyroUri ))
-                visited = pyro_node.view(visited, to_visit,run)
+                pyro_node.view(visited, to_visit,run)
                 logger.info("Got across the call may be ? to {0}".format(next_visit.id))
 
         return visited
