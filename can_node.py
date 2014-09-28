@@ -126,21 +126,21 @@ class CAN_Node(object):
     def view(self,id= None, visited=None,to_visit= None ):
         logger.info("View for node {0}".format(self._id))
         if visited:
-            to_visit.append(list(set(self._neighbours) - set(visited)))
+            to_visit = to_visit + [self._neighbours for node in self._neighbours not in visited ]
         else:
-            visited = []
+            visited = [self]
             to_visit = self._neighbours
 
         if to_visit:
             if self in to_visit:
                 to_visit.remove(self)
-            visited.append(self)
+
             next_visit = min(to_visit, key=lambda n_node:n_node.id)
             if next_visit:
-                logger.info("View moving on to {0}".format(next_visit.id))
+                logger.info("View moving on to Min() Node {0}".format(next_visit.id))
                 pyro_node = Pyro4.Proxy("PYRONAME:node.%s" % next_visit.id)
                 logger.info("Connected to {0} with type {1}".format(pyro_node.id, pyro_node._pyroUri ))
-                visited= pyro_node.view(visited, to_visit)
+                visited = pyro_node.view(visited, to_visit)
                 logger.info("Got across the call may be ? to {0}".format(next_visit.id))
 
         return visited
