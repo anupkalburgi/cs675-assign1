@@ -29,10 +29,8 @@ class CANSHELL(cmd.Cmd):
         print "Name Lookup services connected at {0}".format(self.nameserver._pyroUri.location)
 
 
-    def _print_nodes(self,node):
+    def _print_nodes(self,node,y):
         print "The New Zone is",node.zone
-        y = PrettyTable(["Neighbour-ID", "Zone"],title = "New Node Details",)
-        y.align["Neighbour-ID"] = "l" # Left align
         for neighbour in node.neighbours:
             y.add_row([neighbour.id,neighbour.zone])
         print y
@@ -40,12 +38,24 @@ class CANSHELL(cmd.Cmd):
     def do_join(self,s):
         node1 = Pyro4.Proxy('PYRONAME:node.1')
         new_node = node1.join(int(s))
-        self._print_nodes(new_node)
+        y = PrettyTable(["Neighbour-ID", "Zone"],title = "New Node Details")
+        y.align["Neighbour-ID"] = "l" # Left align
+        self._print_nodes(new_node,y)
 
     def do_leave(self,s):
         node1 = Pyro4.Proxy('PYRONAME:node.1')
         new_node = node1.leave(int(s))
-        self._print_nodes(new_node)
+        y = PrettyTable(["Neighbour-ID", "Zone"],title = "New Node Details")
+        y.align["Neighbour-ID"] = "l" # Left align
+        self._print_nodes(new_node,y)
+
+
+    def do_insert(self,keyword,filename):
+        node1 = Pyro4.Proxy('PYRONAME:node.1')
+        node = node1.insert_file(keyword,filename)
+        y = PrettyTable(["Keyword", "File Name"],title = "Hash Table of the storing node")
+        y.align["Neighbour-ID"] = "l" # Left align
+        self._print_nodes(y)
 
     def do_EOF(self, line):
         return True
