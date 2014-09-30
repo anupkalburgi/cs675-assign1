@@ -35,7 +35,7 @@ class CANSHELL(cmd.Cmd):
         print(y)
 
     def _print_nodes(self,nodes):
-        y = PrettyTable(["Neighbour-ID", "Zone"],title = "New Node Details",)
+        y = PrettyTable(["Neighbour-ID", "Zone"],title = "Node Details",)
         y.align["Neighbour-ID"] = "l" # Left align
         for node in nodes:
             y.add_row([node.id,node.zone])
@@ -60,7 +60,7 @@ class CANSHELL(cmd.Cmd):
     def do_view(self,id=None):
         node1 = Pyro4.Proxy('PYRONAME:node.1')
         nodes = node1.view()
-        self._print_nodes(nodes)
+        self._print_nodes(set(nodes))
 
     def do_EOF(self, line):
         return True
