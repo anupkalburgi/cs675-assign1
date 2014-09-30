@@ -28,35 +28,38 @@ class CANSHELL(cmd.Cmd):
         self.nameserver = Pyro4.locateNS(host='medusa-node1.vsnet.gmu.edu')
         print "Name Lookup services connected at {0}".format(self.nameserver._pyroUri.location)
 
+    def _print_hashtable(self,node):
+        y = PrettyTable(["Keyword", "Filename"])
+        for k,v in node.hash_table.iteritems():
+            y.add_row([k,v])
+        print(y)
 
-    def _print_nodes(self,node,y):
-        print "The New Zone is",node.zone
-        for neighbour in node.neighbours:
+    def _print_nodes(self,nodes):
+        y = PrettyTable(["Neighbour-ID", "Zone"],title = "New Node Details",)
+        y.align["Neighbour-ID"] = "l" # Left align
+        for neighbour in nodes:
             y.add_row([neighbour.id,neighbour.zone])
         print y
 
     def do_join(self,s):
         node1 = Pyro4.Proxy('PYRONAME:node.1')
         new_node = node1.join(int(s))
-        y = PrettyTable(["Neighbour-ID", "Zone"],title = "New Node Details")
-        y.align["Neighbour-ID"] = "l" # Left align
-        self._print_nodes(new_node,y)
+        self._print_nodes(new_node.neighbours)
 
     def do_leave(self,s):
         node1 = Pyro4.Proxy('PYRONAME:node.1')
         new_node = node1.leave(int(s))
-        y = PrettyTable(["Neighbour-ID", "Zone"],title = "New Node Details")
-        y.align["Neighbour-ID"] = "l" # Left align
-        self._print_nodes(new_node,y)
-
+        self._print_nodes(new_node.neighbours)
 
     def do_insert(self,args):
-        node1 = Pyro4.Proxy('PYRONAME:node.1')
         keyword,filename = args.split(" ")
+        node1 = Pyro4.Proxy('PYRONAME:node.1')
         node = node1.insert_file(keyword,filename)
-        y = PrettyTable(["Keyword", "File Name"],title = "Hash Table of the storing node")
-        y.align["Neighbour-ID"] = "l" # Left align
-        self._print_nodes(y)
+        self._print_hashtable(node)
+
+    def do_view(self):
+        nodes = Pyro4.Proxy('PYRONAME:node.1')
+        self._print_nodes(nodes)
 
     def do_EOF(self, line):
         return True
