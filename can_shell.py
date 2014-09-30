@@ -60,7 +60,7 @@ class CANSHELL(cmd.Cmd):
     def do_view(self,id=None):
         node1 = Pyro4.Proxy('PYRONAME:node.1')
         nodes = node1.view()
-        self._print_(nodes)
+        self._print_nodes(nodes)
 
     def do_EOF(self, line):
         return True
