@@ -146,6 +146,12 @@ class CAN_Node(object):
 
         return visited
 
+    def view_by_id(self,id):
+        if id == self._id:
+            return self
+        else:
+            return Pyro4.Proxy("PYRONAME:node.%s" % id)
+
 
     def remote_updater(self,zone,new_neighbours,hash_table):
         logger.info("Node Gettting updated via leave {0}".format(self._id))
