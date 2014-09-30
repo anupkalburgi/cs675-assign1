@@ -30,7 +30,7 @@ class CANSHELL(cmd.Cmd):
 
 
     def _print_nodes(self,node):
-        print "The New Zone is",new_node.zone
+        print "The New Zone is",node.zone
         y = PrettyTable(["Neighbour-ID", "Zone"],title = "New Node Details",)
         y.align["Neighbour-ID"] = "l" # Left align
         for neighbour in node.neighbours:
