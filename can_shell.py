@@ -29,23 +29,23 @@ class CANSHELL(cmd.Cmd):
         print "Name Lookup services connected at {0}".format(self.nameserver._pyroUri.location)
 
 
+    def _print_nodes(self,node):
+        print "The New Zone is",new_node.zone
+        y = PrettyTable(["Neighbour-ID", "Zone"],title = "New Node Details",)
+        y.align["Neighbour-ID"] = "l" # Left align
+        for neighbour in node.neighbours:
+            y.add_row([neighbour.id,neighbour.zone])
+        print y
+
     def do_join(self,s):
         node1 = Pyro4.Proxy('PYRONAME:node.1')
         new_node = node1.join(int(s))
-        print "The New Zone is",new_node.zone
-        y = PrettyTable(["Neighbour-ID", "Zone"])
-        y.align["Neighbour-ID"] = "l" # Left align
-        for neighbour in new_node.neighbours:
-            y.add_row(["Neighbour-ID",neighbour.id])
-            y.add_row(["Zone",neighbour.zone])
-        print(y)
-
-
+        self._print_nodes(new_node)
 
     def do_leave(self,s):
         node1 = Pyro4.Proxy('PYRONAME:node.1')
         new_node = node1.leave(int(s))
-        print new_node.zone,new_node.neighbours
+        self._print_nodes(new_node)
 
     def do_EOF(self, line):
         return True
