@@ -108,7 +108,7 @@ class CAN_Node(object):
             neighbours = self._neighbours + [self]
             logger.info("Got a remote node to update:{0}".format(pyro_node.id))
             new_node = pyro_node.pyro_node_constructor(id, new_zone,neighbours,new_hash_table)
-            self.update_neighbours(new_node)
+            self.update_neighbours(new_node) #Go to all my negh and tell you might have a new ngh or i might not be ur ngh anymore
             self._neighbours.append(new_node)
             logger.info("Finished Join")
 

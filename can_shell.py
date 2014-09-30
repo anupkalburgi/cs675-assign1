@@ -2,6 +2,8 @@ import cmd
 import Pyro4
 from can_node import CAN_Node
 from can_zone import CAN_Zone
+from prettytable import *
+
 
 
 Pyro4.config.SERIALIZER = 'pickle'
@@ -30,7 +32,14 @@ class CANSHELL(cmd.Cmd):
     def do_join(self,s):
         node1 = Pyro4.Proxy('PYRONAME:node.1')
         new_node = node1.join(int(s))
-        print new_node.zone,new_node.neighbours
+        print "The New Zone is",new_node.zone
+        y = PrettyTable(["Neighbour-ID", "Zone"])
+        y.align["Neighbour-ID"] = "l" # Left align
+        for neighbour in new_node.neighbours:
+            y.add_row(neighbour,neighbour.zone)
+        print(y)
+
+
 
     def do_leave(self,s):
         node1 = Pyro4.Proxy('PYRONAME:node.1')
