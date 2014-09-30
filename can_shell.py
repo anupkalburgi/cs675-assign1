@@ -50,8 +50,9 @@ class CANSHELL(cmd.Cmd):
         self._print_nodes(new_node,y)
 
 
-    def do_insert(self,keyword,filename):
+    def do_insert(self,args):
         node1 = Pyro4.Proxy('PYRONAME:node.1')
+        keyword,filename = args.split(" ")
         node = node1.insert_file(keyword,filename)
         y = PrettyTable(["Keyword", "File Name"],title = "Hash Table of the storing node")
         y.align["Neighbour-ID"] = "l" # Left align
