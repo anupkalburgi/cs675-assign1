@@ -35,11 +35,13 @@ class CANSHELL(cmd.Cmd):
         print(y)
 
     def _print_nodes(self,nodes):
-        y = PrettyTable(["Neighbour-ID", "Zone"],title = "Nodes in Network",)
+        y = PrettyTable(["Neighbour-ID", "Zone","Hash Table"],title = "Nodes in Network",)
         y.align["Neighbour-ID"] = "l" # Left align
         for node in nodes:
-            y.add_row([node.id,node.zone])
+            y.add_row([node.id,node.zone,node.hash_table])
         print y
+
+
 
     def do_join(self,s):
         node1 = Pyro4.Proxy('PYRONAME:node.1')
@@ -61,9 +63,10 @@ class CANSHELL(cmd.Cmd):
         node1 = Pyro4.Proxy('PYRONAME:node.1')
         if id is None:
             nodes = node1.view()
+            self._print_nodes(set(nodes))
         else:
-            node = node1.view_by_id()
-        self._print_nodes(set(nodes))
+            node = node1.view_by_id(int(id))
+            self._print_nodes(set([node]))
 
     def do_search(self,keyword):
         node1 = Pyro4.Proxy('PYRONAME:node.1')
