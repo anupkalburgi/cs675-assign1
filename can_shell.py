@@ -29,7 +29,7 @@ class CANSHELL(cmd.Cmd):
         print "Name Lookup services connected at {0}".format(self.nameserver._pyroUri.location)
 
     def _print_hashtable(self,node):
-        y = PrettyTable(["Keyword", "Filename"])
+        y = PrettyTable(["Keyword", "Filename"],title= "File was inserted to Node {0}".format(node.id) )
         for k,v in node.hash_table.iteritems():
             y.add_row([k,v])
         print(y)
@@ -57,7 +57,7 @@ class CANSHELL(cmd.Cmd):
         node = node1.insert_file(keyword,filename)
         self._print_hashtable(node)
 
-    def do_view(self):
+    def do_view(self,id=None):
         nodes = Pyro4.Proxy('PYRONAME:node.1')
         self._print_nodes(nodes)
 
