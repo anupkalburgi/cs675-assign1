@@ -61,13 +61,12 @@ class CANSHELL(cmd.Cmd):
 
     def do_view(self,id=None):
         node1 = Pyro4.Proxy('PYRONAME:node.1')
-        print id
-        if id is None:
-            nodes = node1.view()
-            self._print_nodes(set(nodes))
-        else:
+        if id:
             node = node1.view_by_id(int(id))
             self._print_nodes(set([node]))
+        else:
+            nodes = node1.view()
+            self._print_nodes(set(nodes))
 
     def do_search(self,keyword):
         node1 = Pyro4.Proxy('PYRONAME:node.1')
