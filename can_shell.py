@@ -36,8 +36,8 @@ class CANSHELL(cmd.Cmd):
         y = PrettyTable(["Neighbour-ID", "Zone"])
         y.align["Neighbour-ID"] = "l" # Left align
         for neighbour in new_node.neighbours:
-            y.add_row("Neighbour-ID",neighbour.id)
-            y.add_row("Zone",neighbour.zone)
+            y.add_row(["Neighbour-ID",neighbour.id])
+            y.add_row(["Zone",neighbour.zone])
         print(y)
 
 
