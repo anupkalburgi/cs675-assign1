@@ -68,7 +68,13 @@ Deploy:
            Will get all up and ready for use.
 
 
-         If any where the systems gets hung (Happens with number of Operations being executed
+         If any where the systems gets hung (Happens with number of Operations being executed, we will have to
+
+            fab bootstrap kill stop -f dep_fab.py
+            fab nodes kill -f dep_fab.py
+
+            fab bootstrap bootstrap_deploy -f dep_fab.py
+            fab nodes node_deploy -f dep_fab.py
 
 
 USAGE:
@@ -170,6 +176,10 @@ canshell:-> leave 3
 +--------------+-------------------+------------+----------------------+
 
 
+
+Most of the time It runs as expected, but not more than expected,
+Most of the time the hanging happens because of the TIME_OUT was not implements,
+I realized it way to late in the project, given the dead line, there is no way could get that working.
 
 
 
