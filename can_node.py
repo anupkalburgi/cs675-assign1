@@ -62,24 +62,22 @@ class CAN_Node(object):
         # common we have a winner
         return bool(set(self._zone.sides()).intersection(other_node.zone.sides()))
 
+    def join_new_node_update(self, node):
+        if node in self._neighbours:
+            self._neighbours.remove(node)
+
     def update_neighbours(self, new_node):
         #get all my past neighbours and remove myself from the list
         past_neighbours = [ngh for ngh in self._neighbours if not self.is_neighbours(ngh)]
 
-        new_neighbours = list(set(self._neighbours) - set(past_neighbours))
+        if past_neighbours:
+            for ngh in past_neighbours:
+                pyro_node = Pyro4.Proxy("PYRONAME:node.%s" % ngh.id)
+                pyro_node.join_new_node_update(self)
 
-
-        for ngh in past_neighbours:
-            if self in ngh.neighbours:
-                ngh.neighbours.remove(self)
 
         #Checks if i am still neighbour to the old guys
-        self._neighbours = [ngh for ngh in self._neighbours if self.is_neighbours(ngh)]
-
-        tmp = []
-        for ngh in self._neighbours:
-            if ngh.is_neighbours(new_node) and new_node not in ngh.neighbours:
-                ngh.neighbours.append(new_node)
+        self._neighbours = list(set(self._neighbours) - set(past_neighbours))
 
     def _next_best_node(self, point):
         #get the distance from all the nodes and select a node with minimum distance
