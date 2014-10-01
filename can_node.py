@@ -66,6 +66,9 @@ class CAN_Node(object):
         #get all my past neighbours and remove myself from the list
         past_neighbours = [ngh for ngh in self._neighbours if not self.is_neighbours(ngh)]
 
+        new_neighbours = list(set(self._neighbours) - set(past_neighbours))
+
+
         for ngh in past_neighbours:
             if self in ngh.neighbours:
                 ngh.neighbours.remove(self)
@@ -160,6 +163,19 @@ class CAN_Node(object):
         self._hash_table = hash_table
         return self
 
+
+    def new_node_update(self,new_node):
+        if self.is_neighbours(new_node):
+            self._neighbours.append(new_node)
+        if new_node in self._neighbours and not self.is_neighbours(new_node):
+            self._neighbours.remove(new_node)
+
+
+    def update_my_neighbours(self,new_node):
+        for ngh in self._neighbours:
+            pyro_node = Pyro4.Proxy("PYRONAME:%s" % ngh.id)
+            pyro_node.new_node_update(new_node)
+
     def leave(self,id):
         #Thing is i got to hold a list of node somewhere, or else how would even know what is the xy
         # For a node merge to be proper either it's width or height must be the same or both have to be same
@@ -182,13 +198,14 @@ class CAN_Node(object):
             new_hash_table.update(merging_node.hash_table)
 
             new_neighbours = list(set(self._neighbours + merging_node.neighbours))
-            new_neighbours = [node for node in new_neighbours if node.id != self._id ]
-            new_neighbours = [node for node in new_neighbours if node.id != merging_node.id ]
+            new_neighbours = [node for node in new_neighbours if node.id != self._id ] #removing self
+            new_neighbours = [node for node in new_neighbours if node.id != merging_node.id ] #Remove merging nodes
 
             #Still have to update neighbours
             logger.info("New zone is {0} along with new neighbours {1} and hashtable {2} ".format(new_zone,new_neighbours,new_hash_table))
             pyro_node = Pyro4.Proxy("PYRONAME:node.%s" %merging_node.id )
             merged_node = pyro_node.remote_updater(new_zone,new_neighbours,new_hash_table)
+            self.update_my_neighbours(merged_node)
             logger.info("New With zone {0}".format(merged_node.zone))
             logger.info("Megre Finished")
 
