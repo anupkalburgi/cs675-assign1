@@ -35,10 +35,10 @@ class CANSHELL(cmd.Cmd):
         print(y)
 
     def _print_nodes(self,nodes):
-        y = PrettyTable(["Neighbour-ID", "Zone","Neighbours", "Hash Table"],title = "Nodes in Network",)
+        y = PrettyTable(["Neighbour-ID", "Zone","Neighbours", "Hash Table"],title = "Nodes in Network",max_width = 12)
         y.align["Neighbour-ID"] = "l" # Left align
         for node in nodes:
-            y.add_row([node.id,node.zone,node.neighbours,node.hash_table])
+            y.add_row([node.id,node.zone,len(node.neighbours),node.hash_table])
         print y
 
 
