@@ -70,6 +70,10 @@ class CAN_Node(object):
         #get all my past neighbours and remove myself from the list
         past_neighbours = [ngh for ngh in self._neighbours if not self.is_neighbours(ngh)]
 
+        for ngh in self._neighbours:
+            pyro_node = Pyro4.Proxy("PYRONAME:node.%s" % ngh.id)
+            pyro_node.new_node_update(new_node)
+
         if past_neighbours:
             for ngh in past_neighbours:
                 pyro_node = Pyro4.Proxy("PYRONAME:node.%s" % ngh.id)
@@ -78,6 +82,8 @@ class CAN_Node(object):
 
         #Checks if i am still neighbour to the old guys
         self._neighbours = list(set(self._neighbours) - set(past_neighbours))
+
+
 
     def _next_best_node(self, point):
         #get the distance from all the nodes and select a node with minimum distance
