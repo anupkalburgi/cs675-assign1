@@ -1,0 +1,188 @@
+Dependency: (Will have to be installed, ROOT not required)
+-----------
+
+    On Server:
+        1] Pyro4(http://pythonhosted.org/Pyro4/)
+
+            Install Steps:
+                       easy_install --user Pyro4
+                       (easy_install) is already available on the the systems
+
+    On Local Machine:(From where your are on to deplot)
+        2] Fabric:
+            Used for automating deployment
+                        easy_install --user Fabric
+
+
+After installing above two packages we can go ahead and deploy the software and start the servers.
+
+
+Deploy:
+-------
+
+        1] Getting code,
+            For convenience the code is placed on Github, when deployed the code will be cloned on to the machines specified.
+
+            Changes need for Fabric file.
+                1. In dep_fab.py file
+                    Line 5,6: GMU username and password to log on to servers. (You don't have to give password of SSH keys are in place.)
+                    Line 8: Please specify the directory on the server to hold the code on to.
+
+
+                    Specifying the Servers:
+                        You can specify the the servers as already mentioned in the function from line 10.
+
+                        Please don't include medusa-node1.vsnet.gmu.edu in list of servers, this will be used as bootstrap node. It is been
+                         hardcoded in the client program. (I realized i should have made it configurable)
+
+                After Configuring the above parameters:
+                    From the local machine where you installed Fabric
+
+                    fab bootstrap update -f dep_fab.py   -- Creates a code_dir dicrectory (Configured in last step) and clones code to it.
+
+                    fab bootstrap bootstrap_deploy -f dep_fab.py -- Gets on to Bootstrap Node, starts the bootstrap server and NameServer.
+
+                    fab nodes node_deploy -f dep_fab.py -- starts nodes on all servers listed (The servers listed in the dep_fab file)
+
+
+        Issues that we may run into:
+        ----------------------------
+        After updating please give few Minutes before starting the severs (I had issues when i was kill and starting a lot, should not be the case for the
+            1st time, the NFS file would go stale most of the time)
+
+        After running bootstrap_deploy:
+            We can make sure the server has come up or no by running (on bootstrap node i.e medusa-node1.vsnet.gmu.edu)
+
+                pyro4-nsc list
+
+                will list all up and running servers like:
+                    Pyro.NameServer --> PYRO:Pyro.NameServer@medusa-node1.vsnet.gmu.edu:9090
+                    node.1 --> PYRO:obj_ac8f40a6877d4be4a599fe67b78ead35@10.1.255.253:5150
+
+            If something like this does not come up please rerun the command.
+
+
+        If you get this all right running
+            fab nodes node_deploy -f dep_fab.py
+
+           Will get all up and ready for use.
+
+
+         If any where the systems gets hung (Happens with number of Operations being executed
+
+
+USAGE:
+------
+Log On to any machine (Listed in the dep_fab file) to use it now.
+Navigate to code_dir (Configured in the first step), and then:
+        python can_shell.py
+
+A shell to interact with the CAN network will be ready:
+
+A sample run would look like:
+
+-bash-4.1$ python can_shell.py
+Name Lookup services connected at medusa-node1.vsnet.gmu.edu:9090
+Welcome! You can interact witht he CAN network using this shell.
+canshell:-> view
++--------------------------------------------------------+
+|                    Nodes in Network                    |
++--------------+---------------+------------+------------+
+| Neighbour-ID |      Zone     | Neighbours | Hash Table |
++--------------+---------------+------------+------------+
+| 1            | (0,0)-(10,10) |     0      |     {}     |
++--------------+---------------+------------+------------+
+canshell:-> canshell:-> join 2
++---------------------------------------------------------+
+|                     Nodes in Network                    |
++--------------+----------------+------------+------------+
+| Neighbour-ID |      Zone      | Neighbours | Hash Table |
++--------------+----------------+------------+------------+
+| 1            | (0,0)-(5.0,10) |     1      |     {}     |
++--------------+----------------+------------+------------+
+canshell:-> view
++----------------------------------------------------------+
+|                     Nodes in Network                     |
++--------------+-----------------+------------+------------+
+| Neighbour-ID |       Zone      | Neighbours | Hash Table |
++--------------+-----------------+------------+------------+
+| 1            |  (0,0)-(5.0,10) |     1      |     {}     |
+| 2            | (5.0,0)-(10,10) |     1      |     {}     |
++--------------+-----------------+------------+------------+
+canshell:-> view
++------------------------------------------------------------+
+|                      Nodes in Network                      |
++--------------+-------------------+------------+------------+
+| Neighbour-ID |        Zone       | Neighbours | Hash Table |
++--------------+-------------------+------------+------------+
+| 3            | (5.0,5.0)-(10,10) |     2      |     {}     |
+| 1            |   (0,0)-(5.0,10)  |     2      |     {}     |
+| 2            |  (5.0,0)-(10,5.0) |     2      |     {}     |
++--------------+-------------------+------------+------------+
+canshell:-> join 5
++-------------------------------------------------------------+
+|                       Nodes in Network                      |
++--------------+--------------------+------------+------------+
+| Neighbour-ID |        Zone        | Neighbours | Hash Table |
++--------------+--------------------+------------+------------+
+| 1            |  (0,0)-(5.0,5.0)   |     4      |     {}     |
+| 4            | (2.5,5.0)-(5.0,10) |     4      |     {}     |
+| 2            |  (5.0,0)-(10,5.0)  |     3      |     {}     |
++--------------+--------------------+------------+------------+
+canshell:-> view
++-------------------------------------------------------------+
+|                       Nodes in Network                      |
++--------------+--------------------+------------+------------+
+| Neighbour-ID |        Zone        | Neighbours | Hash Table |
++--------------+--------------------+------------+------------+
+| 2            |  (5.0,0)-(10,5.0)  |     3      |     {}     |
+| 3            |  (0,5.0)-(2.5,10)  |     2      |     {}     |
+| 5            | (5.0,5.0)-(10,10)  |     3      |     {}     |
+| 1            |  (0,0)-(5.0,5.0)   |     4      |     {}     |
+| 4            | (2.5,5.0)-(5.0,10) |     4      |     {}     |
++--------------+--------------------+------------+------------+
+canshell:-> view
++-----------------------------------------------------------------------+
+|                            Nodes in Network                           |
++--------------+--------------------+------------+----------------------+
+| Neighbour-ID |        Zone        | Neighbours |      Hash Table      |
++--------------+--------------------+------------+----------------------+
+| 2            |  (5.0,0)-(10,5.0)  |     3      |          {}          |
+| 3            |  (0,5.0)-(2.5,10)  |     2      |          {}          |
+| 5            | (5.0,5.0)-(10,10)  |     3      |          {}          |
+| 1            |  (0,0)-(5.0,5.0)   |     4      |      {'anupk':       |
+|              |                    |            |    'resume.tex'}     |
+| 4            | (2.5,5.0)-(5.0,10) |     4      |          {}          |
++--------------+--------------------+------------+----------------------+
+canshell:-> search anupk
+1
+canshell:-> leave 3
++----------------------------------------------------------------------+
+|                           Nodes in Network                           |
++--------------+-------------------+------------+----------------------+
+| Neighbour-ID |        Zone       | Neighbours |      Hash Table      |
++--------------+-------------------+------------+----------------------+
+| 2            |  (5.0,0)-(10,5.0) |     3      |          {}          |
+| 5            | (5.0,5.0)-(10,10) |     3      |          {}          |
+| 1            |  (0,0)-(5.0,5.0)  |     5      |      {'anupk':       |
+|              |                   |            |    'resume.tex'}     |
+| 4            |  (0,5.0)-(5.0,10) |     4      |          {}          |
++--------------+-------------------+------------+----------------------+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
