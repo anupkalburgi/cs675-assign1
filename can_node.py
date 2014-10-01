@@ -173,7 +173,7 @@ class CAN_Node(object):
 
     def update_my_neighbours(self,new_node):
         for ngh in self._neighbours:
-            pyro_node = Pyro4.Proxy("PYRONAME:%s" % ngh.id)
+            pyro_node = Pyro4.Proxy("PYRONAME:node.%s" % ngh.id)
             pyro_node.new_node_update(new_node)
 
     def leave(self,id):
